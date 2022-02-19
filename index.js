@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // bypass cross origin policiy
 app.use(cors({
-    origin: ["https://clever-agnesi-768a96.netlify.app/"],
+    origin: ["https://clever-agnesi-768a96.netlify.app"],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));
@@ -33,10 +33,6 @@ app.use(session({
         Expires: 100
     }
 }));
-
-app.get('/', (req, res) => {
-res.send("Hello");
-});
 
 // Routes
 const tractRoutes = require("./api/routes/tract.route");

@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // bypass cross origin policiy
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://clever-agnesi-768a96.netlify.app"],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));

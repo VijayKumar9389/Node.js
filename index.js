@@ -23,6 +23,9 @@ app.use(cors({
     credentials: true
 }));
 
+
+app.set("trust proxy", 1);
+
 //session schema 
 app.use(session({
     key: "Token",

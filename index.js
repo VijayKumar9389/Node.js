@@ -34,6 +34,10 @@ app.use(session({
     }
 }));
 
+app.get('/', (req, res) => {
+res.send("Hello");
+});
+
 // Routes
 const tractRoutes = require("./api/routes/tract.route");
 app.use('/api/tracts', tractRoutes);

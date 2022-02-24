@@ -82,4 +82,18 @@ Tract.getRelationCluster = (name, result) => {
     });
 }
 
+Tract.updateTract = (tractData, result) => {
+    Connection.query("UPDATE wascana set STRUCTURE_TYPE = ?, INTEREST = ?, OCCUPANTS = ?, WORKED = ?, COMMENTS = ? WHERE ID = ?", 
+    [tractData.STRUCTURE_TYPE, tractData.INTEREST, tractData.OCCUPANTS, tractData.WORKED, tractData.COMMENTS, tractData.ID], 
+    (err, res) => {
+        if (err) {
+            console.log('error');
+            result(null, err);
+        } else {
+            console.log("Tract updated successfully");
+            result(null, res);
+        }
+    });
+}
+
 module.exports = Tract;

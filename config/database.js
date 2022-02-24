@@ -10,12 +10,13 @@ const connection = mysql.createPool({
 });
 
 //tests connection
-connection.query(function(error) {
-    if(error){
-        console.log("Error connecting to the Database");
-    } else {
-        console.log("Successfully connected to the Database");
-    }
-});
+// connection.query(function(error) {
+//     if(error){
+//         console.log("Error connecting to the Database");
+//         console.log(error)
+//     } else {
+//         console.log("Successfully connected to the Database");
+//     }
+// });
 
 module.exports = connection;

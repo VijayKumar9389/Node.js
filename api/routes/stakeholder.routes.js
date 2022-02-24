@@ -7,9 +7,8 @@ const { name } = require("../models/stakeholder.model");
 
 router.get('/', validateToken, stakeholderController.getStakeholderList);
 router.get('/:name', validateToken, stakeholderController.getStakeholderbyName);
-router.get('/PhoneNO/:name', validateToken, stakeholderController.getMatchingNumbers);
-router.get('/Address/:name', validateToken, stakeholderController.getMatchingAddress);
-router.get('/Locations', validateToken, stakeholderController.getStakeholderList);
+router.get('/connections/:name', validateToken, stakeholderController.getConnections);
+router.get('/sidebar/locations', validateToken, stakeholderController.getAllLocations);
 router.put('/update', validateToken, stakeholderController.updateStakeholder);
 
 module.exports = router;

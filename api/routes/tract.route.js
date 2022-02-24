@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const tractController = require("../controller/tract.controller");
 const {validateToken} = require("../middleware/Auth");
 
@@ -13,6 +12,7 @@ router.get('/id/:id', validateToken, tractController.getTractbyID);
 router.get('/tractNo/:tractNo', validateToken, tractController.getTractbyNo);
 router.get('/name/:name', validateToken, tractController.getTractbyName);
 router.get('/cluster/:name', validateToken, tractController.getRelationCluster);
-router.get('/Locations', validateToken, tractController.getAllLocations);
+router.get('/report', validateToken, tractController.getReport);
+router.put('/update', validateToken, tractController.updateTract);
 
-module.exports = router
+module.exports = router;

@@ -82,43 +82,74 @@ exports.getTractbyName = (req, res) => {
 }
 
 // compiles a list of provinces/states and the citites within them
-exports.getAllLocations = (req, res) => {
+exports.getReport = (req, res) => {
     TractModel.getAllTracts((err, tracts) => {
         if (err)
             res.send(err);
 
-        var provinceList = [];
-        var Locationlist = [];
         var string = JSON.stringify(tracts);
         var json = JSON.parse(string);
+        var singleTract = 0;
+        var multiTract = 0;
+        var contacted = 0;
+        var remaining = 0;
+        var total = [];
+        var stakeholderList = [];
 
+        //removes duplicate records
         for (let i = 0; i < json.length; i++) {
-            if (json[i].MAILING !== "") {
-                var location = json[i].MAILING.split(',');
-                if (!provinceList.includes(location[location.length - 2])) {
-                    provinceList.push(location[location.length - 2]);
-                }
+            if(!stakeholderList.includes(json[i].NAME)){
+                stakeholderList.push(json[i].NAME)
+                total.push(json[i])
             }
         }
 
-        for (let i = 0; i < provinceList.length; i++) {
-            var tmp = [];
-
-            for (let y = 0; y < json.length; y++) {
-
-                var location = json[y].MAILING.split(',');
-
-                if (location[location.length - 2] === provinceList[i]) {
-                    if (!tmp.includes(location[location.length - 3])) {
-                        tmp.push(location[location.length - 3]);
-                    }
-                }
-
+        for (let i = 0; i < total.length; i++) {
+            if (total[i].CONTACTED !== 'YES'){
+                remaining++;
+            } else {
+                contacted++;
             }
-            Locationlist.push({ province: provinceList[i], cities: tmp })
         }
 
-        console.log(Locationlist)
-        res.send(Locationlist);
+        //checks how many times the name appears in the original 
+        for (let y = 0; y < total.length; y++) {
+
+            var stakeholders = [];
+            var count = 0;
+
+            //grabs number of instances
+            for (let i = 0; i < json.length; i++) {
+                if (total[y].NAME === json[i].NAME) {
+                    stakeholders.push(json[i].NAME);
+                }
+            }
+
+            //determines if stakeholder is single tract or multie
+            if(stakeholders.length > 1){
+                multiTract++;
+            } else {
+                singleTract++;
+            }
+
+
+        }
+
+
+
+        res.send({contacted: contacted, remaining: remaining, total: total.length, single: singleTract, multi: multiTract })
+
+
+    });
+}
+
+exports.updateTract = (req, res) => {
+    const tractData = req.body
+    TractModel.updateTract(tractData, (err, stakeholder) => {
+        console.log("Tract updated");
+        if (err)
+            res.send(err);
+        console.log("Changed Tract to", tractData)
+        res.send(tractData)
     });
 }

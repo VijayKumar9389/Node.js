@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // bypass cross origin policiy
 app.use(cors({
-    origin: ["https://clever-agnesi-768a96.netlify.app"],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));
@@ -47,5 +47,5 @@ app.use('/api/auth/', authRoutes);
 
 
 app.listen(PORT, () => {
-    console.log(`App is running on port`);
+    console.log(`App is running on port ${PORT}`);
 });

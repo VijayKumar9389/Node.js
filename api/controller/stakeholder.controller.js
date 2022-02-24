@@ -20,20 +20,57 @@ exports.getStakeholderbyName = (req, res) => {
     });
 }
 
-
-// get stakeholders who share the same number as the requested stakeholder
-exports.getMatchingNumbers = (req, res) => {
+// get stakeholders who share the same street or mailing address as the requested stakeholder
+exports.getConnections = (req, res) => {
     StakeholderModel.getAllStakeholders((err, stakeholder) => {
-        
         if (err)
             res.send(err);
 
         var string = JSON.stringify(stakeholder);
         var json = JSON.parse(string);
         var clientName = req.params.name;
+        var reqStreet;
+        var reqMailing;
+        var Phonerelatives = [];
         var clientNumberList;
-        var tmp = [];
         var relatives = [];
+        var streetrelatives = [];
+        var connections = [];
+
+        //Grabs the requested stakeholders mailing and street address
+        for (let y = 0; y < json.length; y++) {
+            if (clientName === json[y].NAME) {
+                reqStreet = json[y].STREET;
+                reqMailing = json[y].MAILING;
+                break;
+            }
+        }
+
+        //checks each stakeholders adress
+        for (let i = 0; i < json.length; i++) {
+            var stakeholderStreet = json[i].STREET;
+            //checks if mailing or street address is a match
+            if (reqStreet === stakeholderStreet) {
+                if (json[i].NAME !== clientName) {
+                    if (stakeholderMailing !== "" && stakeholderStreet !== "") {
+                        streetrelatives.push(json[i]);
+                    }
+                }
+            }
+        }
+
+                //checks each stakeholders adress
+                for (let i = 0; i < json.length; i++) {
+                    var stakeholderMailing = json[i].MAILING;
+                    //checks if mailing or street address is a match
+                    if (reqMailing === stakeholderMailing) {
+                        if (json[i].NAME !== clientName) {
+                            if (stakeholderMailing !== "" && stakeholderStreet !== "") {
+                                relatives.push(json[i]);
+                            }
+                        }
+                    }
+                }
 
         //Grabs the requested stakeholders number
         for (let y = 0; y < json.length; y++) {
@@ -55,71 +92,140 @@ exports.getMatchingNumbers = (req, res) => {
                     for (let x = 0; x < searchNoList.length; x++) {
                         var searchNo = searchNoList[x].split(':');
                         if (json[y].NAME !== clientName && json[y].PHONE !== "") {
-                            if (clientNumber[1] === searchNo[1] && !tmp.includes(json[y].NAME)) {
-                                relatives.push(json[y]);
-                                tmp.push(json[y].NAME);
+                            if (clientNumber[1] === searchNo[1]) {
+                                Phonerelatives.push(json[y]);
                             }
                         }
                     }
                 }
             }
         }
-        res.send(relatives);
+
+
+        //Creates an array with each connection type for any related stakeholders
+        for (let i = 0; i < json.length; i++) {
+            let matchingPhone = false;
+            let matchingAddress = false;
+            let mathcingStreet = false;
+
+            for (let y = 0; y < Phonerelatives.length; y++) {
+                if (Phonerelatives[y].NAME === json[i].NAME) {
+                    matchingPhone = true;
+                }
+            }
+
+            for (let x = 0; x < relatives.length; x++) {
+                if (relatives[x].NAME === json[i].NAME) {
+                    matchingAddress = true;
+                }
+            }
+
+            for (let x = 0; x < streetrelatives.length; x++) {
+                if (streetrelatives[x].NAME === json[i].NAME) {
+                    mathcingStreet = true;
+                }
+            }
+
+            if (matchingAddress || matchingPhone) {
+                connections.push({ stakeholder: json[i], phone: matchingPhone, address: matchingAddress, street: mathcingStreet });
+            }
+
+        }
+        res.send(connections);
     });
 }
 
-
-// get stakeholders who share the same street or mailing address as the requested stakeholder
-exports.getMatchingAddress = (req, res) => {
+// compiles a list of provinces/states and the citites within them
+exports.getAllLocations = (req, res) => {
     StakeholderModel.getAllStakeholders((err, stakeholder) => {
         if (err)
             res.send(err);
 
+        //variables
+        var provinceList = [];
+        var Locationlist = [];
         var string = JSON.stringify(stakeholder);
         var json = JSON.parse(string);
-        var clientName = req.params.name;
-        var reqStreet;
-        var reqMailing;
-        var relatives = [];
-        var tmp = [];
+        var missing = 0;
 
-        //Grabs the requested stakeholders number
-        for (let y = 0; y < json.length; y++) {
-            if (clientName === json[y].NAME) {
-                reqStreet = json[y].STREET;
-                reqMailing = json[y].MAILING;
-                break;
+        for (let z = 0; z < json.length; z++) {
+            if(json[z].MAILING === '' && json[z].STREET === ''){
+                missing++;
             }
         }
 
-        //Grabs each number from the requested stakeholder 
+        Locationlist.push({ province: 'MISSING', count: missing, cities: [] });
+
+
+        //adds provinces or states
         for (let i = 0; i < json.length; i++) {
-            var stakeholderStreet = json[i].STREET;
-            var stakeholderMailing = json[i].MAILING;
-            //Splits each number
-            if (reqStreet === stakeholderStreet || reqMailing === stakeholderMailing) {
-                if (!tmp.includes(json[i].NAME) && json[i].NAME !== clientName && json[i]) {
-                    if (stakeholderMailing !== "" && stakeholderStreet !== "") {
-                        relatives.push(json[i]);
-                        tmp.push(json[i].NAME);
-                    }
+            // checks if address is empty
+            if (json[i].MAILING !== "") {
+                var location = json[i].MAILING.split(',');
+                //if province/state is not in the list add it
+                if (!provinceList.includes(location[location.length - 2])) {
+                    provinceList.push(location[location.length - 2]);
                 }
             }
         }
-        res.send(relatives);
+
+        //checks for cities in each province
+        for (let i = 0; i < provinceList.length; i++) {
+
+            var cityList = [];
+            var test = [];
+            var provinceCount = 0;
+            var ttest = [];
+            
+            //check every stakeholders location
+            for (let y = 0; y < json.length; y++) {
+
+                var location = json[y].MAILING.split(',');
+                var city = location[location.length - 3];
+                var province = location[location.length - 2];
+
+                //checks province
+                if (province === provinceList[i]) {
+
+                    provinceCount++;
+                    var cityCount = 0;
+
+                    // adds city if it wasnt added already
+                    if (!test.includes(city)) {
+
+                        //check how many times a city appears
+                        for (let x = 0; x < json.length; x++) {
+                            var tmp = json[x].MAILING.split(',');
+                            if (city === tmp[location.length - 3]) {
+                                cityCount++;
+                                if (city === ' REGINA'){
+                                    ttest.push(tmp[location.length - 3] + ' Regina ' + json[x].NAME);
+                                }
+                            }
+                        }
+
+                        test.push(city);
+                        cityList.push({name: city, count: cityCount});
+                    }
+                }
+            }
+
+            Locationlist.push({ province: provinceList[i], test: ttest, count: provinceCount, cities: cityList });
+        }
+        res.send(Locationlist);
     });
 }
 
 
 // update stakeholder's information across the database by name
 exports.updateStakeholder = (req, res) => {
-    const stakeholderData = req.body
+    const stakeholderData = req.body;
     StakeholderModel.updateStakeholder(stakeholderData, (err, stakeholder) => {
         console.log("Stakeholder updated");
         if (err)
             res.send(err);
-        console.log("Changed info to", stakeholderData)
-        res.send(stakeholderData)
+        console.log("Changed info to", stakeholderData);
+        res.send(stakeholderData);
     });
 }
 

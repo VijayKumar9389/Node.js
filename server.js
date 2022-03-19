@@ -45,8 +45,8 @@ app.use('/api/stakeholders', stakerholderRoutes);
 const authRoutes = require("./api/routes/auth.routes");
 app.use('/api/auth/', authRoutes);
 
-app.get('/api/Test', (req, res) => {
-    res.send('Test Worked!');
+app.get('/', (req, res) => {
+    res.send('Root Page');
 });
 
 app.listen(PORT, () => {

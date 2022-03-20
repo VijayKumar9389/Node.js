@@ -36,9 +36,8 @@ app.use(session({
 }));
 
 // Routes
-
 app.get('/', (req, res) => {
-    res.send('Root Page');
+    res.send(process.env.PORT);
 });
 
 const tractRoutes = require("./api/routes/tract.route");

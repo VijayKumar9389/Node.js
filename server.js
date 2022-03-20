@@ -6,6 +6,7 @@ const session = require("express-session");
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const app = express();
+var Connection = require('./config/database');
 
 //recognize incoming request as a JSON Object
 app.use(express.json());
@@ -37,7 +38,14 @@ app.use(session({
 
 // Routes
 app.get('/', (req, res) => {
-    res.send(process.env.PORT);
+    Connection.connect(function(err) {
+        if(err){
+            res.send('Database Error');
+            console.log(err);
+        }
+        else 
+        res.send("Database connected");
+    });
 });
 
 const tractRoutes = require("./api/routes/tract.route");

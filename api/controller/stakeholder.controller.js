@@ -10,6 +10,20 @@ exports.getStakeholderList = (req, res) => {
     });
 }
 
+// get First Stakeholder
+exports.getFirstStakeholder = (req, res) => {
+    StakeholderModel.getAllStakeholders((err, stakeholder) => {
+
+        var string = JSON.stringify(stakeholder);
+        var json = JSON.parse(string);
+
+        if (err)
+            res.send(err);
+        console.log("Fetched the following stakeholder", stakeholder)
+        res.send(json[0]);
+    });
+}
+
 // get stakeholder by name
 exports.getStakeholderbyName = (req, res) => {
     StakeholderModel.getStakeholderbyName(req.params.name, (err, stakeholder) => {
@@ -59,18 +73,18 @@ exports.getConnections = (req, res) => {
             }
         }
 
-                //checks each stakeholders adress
-                for (let i = 0; i < json.length; i++) {
-                    var stakeholderMailing = json[i].MAILING;
-                    //checks if mailing or street address is a match
-                    if (reqMailing === stakeholderMailing) {
-                        if (json[i].NAME !== clientName) {
-                            if (stakeholderMailing !== "" && stakeholderStreet !== "") {
-                                relatives.push(json[i]);
-                            }
-                        }
+        //checks each stakeholders adress
+        for (let i = 0; i < json.length; i++) {
+            var stakeholderMailing = json[i].MAILING;
+            //checks if mailing or street address is a match
+            if (reqMailing === stakeholderMailing) {
+                if (json[i].NAME !== clientName) {
+                    if (stakeholderMailing !== "" && stakeholderStreet !== "") {
+                        relatives.push(json[i]);
                     }
                 }
+            }
+        }
 
         //Grabs the requested stakeholders number
         for (let y = 0; y < json.length; y++) {
@@ -149,7 +163,7 @@ exports.getAllLocations = (req, res) => {
         var missing = 0;
 
         for (let z = 0; z < json.length; z++) {
-            if(json[z].MAILING === '' && json[z].STREET === ''){
+            if (json[z].MAILING === '' && json[z].STREET === '') {
                 missing++;
             }
         }
@@ -176,7 +190,7 @@ exports.getAllLocations = (req, res) => {
             var test = [];
             var provinceCount = 0;
             var ttest = [];
-            
+
             //check every stakeholders location
             for (let y = 0; y < json.length; y++) {
 
@@ -198,14 +212,14 @@ exports.getAllLocations = (req, res) => {
                             var tmp = json[x].MAILING.split(',');
                             if (city === tmp[location.length - 3]) {
                                 cityCount++;
-                                if (city === ' REGINA'){
+                                if (city === ' REGINA') {
                                     ttest.push(tmp[location.length - 3] + ' Regina ' + json[x].NAME);
                                 }
                             }
                         }
 
                         test.push(city);
-                        cityList.push({name: city, count: cityCount});
+                        cityList.push({ name: city, count: cityCount });
                     }
                 }
             }

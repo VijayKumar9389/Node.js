@@ -36,6 +36,11 @@ app.use(session({
 }));
 
 // Routes
+
+app.get('/', (req, res) => {
+    res.send('Root Page');
+});
+
 const tractRoutes = require("./api/routes/tract.route");
 app.use('/api/tracts', tractRoutes);
 
@@ -44,10 +49,6 @@ app.use('/api/stakeholders', stakerholderRoutes);
 
 const authRoutes = require("./api/routes/auth.routes");
 app.use('/api/auth/', authRoutes);
-
-app.get('/', (req, res) => {
-    res.send('Root Page');
-});
 
 app.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`);

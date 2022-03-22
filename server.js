@@ -6,7 +6,6 @@ const session = require("express-session");
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const app = express();
-var Connection = require('./config/database');
 
 //recognize incoming request as a JSON Object
 app.use(express.json());
@@ -19,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // bypass cross origin policiy
 app.use(cors({
-    origin: ["https://clever-agnesi-768a96.netlify.app"],
+    origin: ["http://api-app.eba-xdipi38t.ca-central-1.elasticbeanstalk.com"],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));
@@ -27,7 +26,7 @@ app.use(cors({
 //Declare session  
 app.use(session({
     key: "Token",
-    proxy : true,
+    proxy: true,
     secret: "Testing",
     resave: false,
     saveUninitialized: false,
@@ -38,14 +37,7 @@ app.use(session({
 
 // Routes
 app.get('/', (req, res) => {
-    Connection.connect(function(err) {
-        if(err){
-            res.send('Database Error');
-            console.log(err);
-        }
-        else 
-        res.send("Database connected");
-    });
+    res.send("API Connected")
 });
 
 const tractRoutes = require("./api/routes/tract.route");
@@ -55,6 +47,7 @@ const stakerholderRoutes = require("./api/routes/stakeholder.routes");
 app.use('/api/stakeholders', stakerholderRoutes);
 
 const authRoutes = require("./api/routes/auth.routes");
+const { connect } = require('./config/database');
 app.use('/api/auth/', authRoutes);
 
 app.listen(PORT, () => {

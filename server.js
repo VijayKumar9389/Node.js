@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // bypass cross origin policiy
 app.use(cors({
-    origin: ["http://api-app.eba-xdipi38t.ca-central-1.elasticbeanstalk.com"],
+    origin: ["https://main.d3r62sci50fysg.amplifyapp.com"],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));

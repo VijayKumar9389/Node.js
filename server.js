@@ -62,11 +62,7 @@ const authRoutes = require("./api/routes/auth.routes");
 const { connect } = require('./config/database');
 app.use('/api/auth/', authRoutes);
 
-app.listen(PORT, () => {
-    console.log(`App is running on port ${PORT}`);
-});
-
 https.createServer(httpsOptions, app)
 .listen(PORT, () => {
-    console.log(`Serving ${directoryToServe}/ at ${PORT}`);
+    console.log(`Serving ${directoryToServe}/ ats ${PORT}`);
 })

@@ -5,7 +5,12 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
+directoryToServe = 'client'
 const app = express();
+
+const fs = require('fs');
+const https = require('https');
+const path = require('path');
 
 //recognize incoming request as a JSON Object
 app.use(express.json());
@@ -35,6 +40,13 @@ app.use(session({
     }
 }));
 
+app.use('/', express.static(path.join(__dirname, '..', directoryToServe)))
+
+const httpsOptions = {
+    cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
+    key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key'))
+}
+
 // Routes
 app.get('/', (req, res) => {
     res.send("API Connected")
@@ -53,3 +65,8 @@ app.use('/api/auth/', authRoutes);
 app.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`);
 });
+
+https.createServer(httpsOptions, app)
+.listen(PORT, () => {
+    console.log(`Serving ${directoryToServe}/ at ${PORT}`);
+})

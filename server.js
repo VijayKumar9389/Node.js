@@ -6,11 +6,9 @@ const session = require("express-session");
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const app = express();
-const forceHttps = require('@crystallize/elasticloadbalancer-express-force-https');
 
 //recognize incoming request as a JSON Object
 app.use(express.json());
-app.use(forceHttps());
 
 // parses cookies attached in the client request
 app.use(cookieParser());
@@ -39,7 +37,7 @@ app.use(session({
 
 // Routes
 app.use('/', (req, res, next) => {
-    res.send("hello")
+    res.send("hello");
 });
 
 const tractRoutes = require("./api/routes/tract.route");

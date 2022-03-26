@@ -36,8 +36,8 @@ app.use(session({
 }));
 
 // Routes
-app.use('/', (req, res) => {
-    res.send("Root");
+app.get('/', (req, res) => {
+    res.send("API Connected")
 });
 
 const tractRoutes = require("./api/routes/tract.route");

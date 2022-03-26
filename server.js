@@ -6,16 +6,7 @@ const session = require("express-session");
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const app = express();
-
-function forceHttps(req, res, next) {
-    const xfp =
-        req.headers["X-Forwarded-Proto"] || req.headers["x-forwarded-proto"];
-    if (xfp === "http") {
-        res.redirect(301, `https://${hostname}${req.url}`);
-    } else {
-        next();
-    }
-}
+const forceHttps = require('@crystallize/elasticloadbalancer-express-force-https');
 
 //recognize incoming request as a JSON Object
 app.use(express.json());

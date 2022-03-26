@@ -7,6 +7,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const app = express();
 
+
 //recognize incoming request as a JSON Object
 app.use(express.json());
 
@@ -35,9 +36,19 @@ app.use(session({
     }
 }));
 
+function forceHttps(req, res, next) {
+    const xfp =
+        req.headers["X-Forwarded-Proto"] || req.headers["x-forwarded-proto"];
+    if (xfp === "http") {
+        res.redirect(301, `https://${hostname}${req.url}`);
+    } else {
+        next();
+    }
+}
+
 // Routes
-app.get('/', (req, res) => {
-    res.send("API Connected")
+app.use('/', (req, res, next) => {
+    res.send("hello")
 });
 
 const tractRoutes = require("./api/routes/tract.route");
@@ -47,7 +58,6 @@ const stakerholderRoutes = require("./api/routes/stakeholder.routes");
 app.use('/api/stakeholders', stakerholderRoutes);
 
 const authRoutes = require("./api/routes/auth.routes");
-const { connect } = require('./config/database');
 app.use('/api/auth/', authRoutes);
 
 app.listen(PORT, () => {

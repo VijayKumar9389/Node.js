@@ -7,9 +7,19 @@ require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const app = express();
 
+function forceHttps(req, res, next) {
+    const xfp =
+        req.headers["X-Forwarded-Proto"] || req.headers["x-forwarded-proto"];
+    if (xfp === "http") {
+        res.redirect(301, `https://${hostname}${req.url}`);
+    } else {
+        next();
+    }
+}
 
 //recognize incoming request as a JSON Object
 app.use(express.json());
+app.use(forceHttps());
 
 // parses cookies attached in the client request
 app.use(cookieParser());
@@ -35,16 +45,6 @@ app.use(session({
         Expires: 100
     }
 }));
-
-function forceHttps(req, res, next) {
-    const xfp =
-        req.headers["X-Forwarded-Proto"] || req.headers["x-forwarded-proto"];
-    if (xfp === "http") {
-        res.redirect(301, `https://${hostname}${req.url}`);
-    } else {
-        next();
-    }
-}
 
 // Routes
 app.use('/', (req, res, next) => {

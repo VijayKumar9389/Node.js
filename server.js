@@ -37,7 +37,7 @@ app.use(session({
 
 // Routes
 app.use('/', (req, res, next) => {
-    res.send("hello");
+    res.send("Root");
 });
 
 const tractRoutes = require("./api/routes/tract.route");

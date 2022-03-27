@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // bypass cross origin policiy
 app.use(cors({
-    origin: ["https://www.tritonsrm.com"],
+    origin: ["https://main.d2j56h0szwmyob.amplifyapp.com"],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));

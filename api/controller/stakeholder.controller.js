@@ -163,7 +163,12 @@ exports.getAllLocations = (req, res) => {
         var missing = 0;
 
         for (let z = 0; z < json.length; z++) {
+
+            var locationChars = json[z].MAILING.split(',');
+
             if (json[z].MAILING === '' && json[z].STREET === '') {
+                missing++;
+            } else if(locationChars.length < 3){
                 missing++;
             }
         }

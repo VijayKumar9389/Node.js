@@ -13,7 +13,7 @@ var Stakeholder = (stakeholder) => {
 }
 
 Stakeholder.getAllStakeholders = (result) => {
-    Connection.query("SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP FROM wascana group by NAME", (err, res) => {
+    Connection.query("SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, COUNT(*) as count FROM wascana group by NAME", (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);

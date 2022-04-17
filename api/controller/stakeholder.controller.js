@@ -10,20 +10,6 @@ exports.getStakeholderList = (req, res) => {
     });
 }
 
-// get First Stakeholder
-exports.getFirstStakeholder = (req, res) => {
-    StakeholderModel.getAllStakeholders((err, stakeholder) => {
-
-        var string = JSON.stringify(stakeholder);
-        var json = JSON.parse(string);
-
-        if (err)
-            res.send(err);
-        console.log("Fetched the following stakeholder", stakeholder)
-        res.send(json[0]);
-    });
-}
-
 // get stakeholder by name
 exports.getStakeholderbyName = (req, res) => {
     StakeholderModel.getStakeholderbyName(req.params.name, (err, stakeholder) => {
@@ -183,7 +169,9 @@ exports.getAllLocations = (req, res) => {
                 var location = json[i].MAILING.split(',');
                 //if province/state is not in the list add it
                 if (!provinceList.includes(location[location.length - 2])) {
-                    provinceList.push(location[location.length - 2]);
+                    if(location.length > 2){
+                        provinceList.push(location[location.length - 2]);
+                    }
                 }
             }
         }
@@ -194,7 +182,6 @@ exports.getAllLocations = (req, res) => {
             var cityList = [];
             var test = [];
             var provinceCount = 0;
-            var ttest = [];
 
             //check every stakeholders location
             for (let y = 0; y < json.length; y++) {
@@ -217,9 +204,6 @@ exports.getAllLocations = (req, res) => {
                             var tmp = json[x].MAILING.split(',');
                             if (city === tmp[location.length - 3]) {
                                 cityCount++;
-                                if (city === ' REGINA') {
-                                    ttest.push(tmp[location.length - 3] + ' Regina ' + json[x].NAME);
-                                }
                             }
                         }
 
@@ -229,7 +213,7 @@ exports.getAllLocations = (req, res) => {
                 }
             }
 
-            Locationlist.push({ province: provinceList[i], test: ttest, count: provinceCount, cities: cityList });
+            Locationlist.push({ province: provinceList[i], count: provinceCount, cities: cityList });
         }
         res.send(Locationlist);
     });

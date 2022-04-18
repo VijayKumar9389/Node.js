@@ -24,7 +24,7 @@ var Tract = (tract) => {
 }
 
 Tract.getAllTracts = (result) => {
-    Connection.query("select * from wascana", (err, res) => {
+    Connection.query("select * from Kerrobert_2022", (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);
@@ -38,7 +38,7 @@ Tract.getAllTracts = (result) => {
 
 // get tract by id from data base
 Tract.getTractbyID = (id, result) => {
-    Connection.query("SELECT * from wascana where id=?", id, (err, res)=>{
+    Connection.query("SELECT * from Kerrobert_2022 where id=?", id, (err, res)=>{
         if(err){
             console.log('Error fetching tract by id');
             result(null, err);
@@ -49,7 +49,7 @@ Tract.getTractbyID = (id, result) => {
 }
 
 Tract.getTractbyNo = (tractNo, result) => {
-    Connection.query("SELECT * from wascana where tract=?", tractNo, (err, res)=>{
+    Connection.query("SELECT * from Kerrobert_2022 where tract=?", tractNo, (err, res)=>{
         if(err){
             console.log('Error fetching tract by number');
             result(null, err);
@@ -60,7 +60,7 @@ Tract.getTractbyNo = (tractNo, result) => {
 }
 
 Tract.getTractbyName = (name, result) => {
-    Connection.query("SELECT * from wascana where name=?", name, (err, res)=>{
+    Connection.query("SELECT * from Kerrobert_2022 where name=?", name, (err, res)=>{
         if(err){
             console.log('Error fetching tract by number');
             result(null, err);
@@ -71,7 +71,7 @@ Tract.getTractbyName = (name, result) => {
 }
 
 Tract.getRelationCluster = (name, result) => {
-    Connection.query("select * from wascana", (err, res) => {
+    Connection.query("select * from Kerrobert_2022", (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);
@@ -83,7 +83,7 @@ Tract.getRelationCluster = (name, result) => {
 }
 
 Tract.updateTract = (tractData, result) => {
-    Connection.query("UPDATE wascana set STRUCTURE_TYPE = ?, INTEREST = ?, OCCUPANTS = ?, WORKED = ?, COMMENTS = ? WHERE ID = ?", 
+    Connection.query("UPDATE Kerrobert_2022 set STRUCTURE_TYPE = ?, INTEREST = ?, OCCUPANTS = ?, WORKED = ?, COMMENTS = ? WHERE ID = ?", 
     [tractData.STRUCTURE_TYPE, tractData.INTEREST, tractData.OCCUPANTS, tractData.WORKED, tractData.COMMENTS, tractData.ID], 
     (err, res) => {
         if (err) {

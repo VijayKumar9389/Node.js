@@ -37,7 +37,7 @@ app.use(session({
 
 // Routes
 app.get('/', (req, res) => {
-    res.send("API Connected")
+    res.send("API Connected Test")
 });
 
 const tractRoutes = require("./api/routes/tract.route");

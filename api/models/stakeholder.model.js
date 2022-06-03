@@ -13,7 +13,7 @@ var Stakeholder = (stakeholder) => {
 }
 
 Stakeholder.getAllStakeholders = (result) => {
-    Connection.query("SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, COUNT(*) as count FROM Kerrobert_2022 group by NAME", (err, res) => {
+    Connection.query(`SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, COUNT(*) as count FROM ${process.env.TABLE} group by NAME`, (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);
@@ -25,7 +25,7 @@ Stakeholder.getAllStakeholders = (result) => {
 }
 
 Stakeholder.getStakeholderbyName = (name, result) => {
-    Connection.query("SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP FROM Kerrobert_2022 WHERE NAME = ?", name, (err, res) => {
+    Connection.query(`SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP FROM ${process.env.TABLE} WHERE NAME = ?`, name, (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);
@@ -37,7 +37,7 @@ Stakeholder.getStakeholderbyName = (name, result) => {
 }
 
 Stakeholder.updateStakeholder = (stakeholderData, result) => {
-    Connection.query("UPDATE Kerrobert_2022 set NAME = ?, CONTACT = ?, STREET = ?, MAILING = ?, PHONE = ?,  CONTACTED = ?, ATTEMPTS = ?, CONSULTATION = ?, FOLLOWUP = ? WHERE name = ?", 
+    Connection.query(`UPDATE ${process.env.TABLE} set NAME = ?, CONTACT = ?, STREET = ?, MAILING = ?, PHONE = ?,  CONTACTED = ?, ATTEMPTS = ?, CONSULTATION = ?, FOLLOWUP = ? WHERE name = ?`, 
     [stakeholderData.NEWNAME, stakeholderData.CONTACTSTATUS, stakeholderData.STREET, stakeholderData.MAILING, stakeholderData.PHONE, stakeholderData.CONTACTED, stakeholderData.ATTEMPTS, stakeholderData.CONSULTATION, stakeholderData.FOLLOWUP, stakeholderData.NAME], 
     (err, res) => {
         if (err) {

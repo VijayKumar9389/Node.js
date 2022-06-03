@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // bypass cross origin policiy
 app.use(cors({
-    origin: ["https://main.d38u72y58jdxwg.amplifyapp.com"],
+    origin: [ process.env.ORIGIN],
     methods: ["GET", "POST", "PUT"],
     credentials: true
 }));
@@ -37,7 +37,7 @@ app.use(session({
 
 // Routes
 app.get('/', (req, res) => {
-    res.send("API Endpoint")
+    res.send("SRM API Endpoint")
 });
 
 const tractRoutes = require("./api/routes/tract.route");

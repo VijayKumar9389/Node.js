@@ -1,4 +1,9 @@
+const xlsx = require('xlsx');
+const path = require('path');
+
 const TractModel = require("../models/tract.model");
+
+const HeadingJson = ['tractNo', 'pin', 'structure_type', 'interest', 'contact', 'name', 'street', 'mailing', 'phone', 'occupants', 'worked', 'contacted', 'attempts', 'consultation', 'followup', 'comments', 'keepdelete', 'commodity', 'pipelinestatus'];
 
 // get all tracts
 exports.getTractList = (req, res) => {
@@ -98,14 +103,14 @@ exports.getReport = (req, res) => {
 
         //removes duplicate records
         for (let i = 0; i < json.length; i++) {
-            if(!stakeholderList.includes(json[i].NAME)){
+            if (!stakeholderList.includes(json[i].NAME)) {
                 stakeholderList.push(json[i].NAME)
                 total.push(json[i])
             }
         }
 
         for (let i = 0; i < total.length; i++) {
-            if (total[i].CONTACTED !== 'YES'){
+            if (total[i].CONTACTED !== 'YES') {
                 remaining++;
             } else {
                 contacted++;
@@ -126,7 +131,7 @@ exports.getReport = (req, res) => {
             }
 
             //determines if stakeholder is single tract or multie
-            if(stakeholders.length > 1){
+            if (stakeholders.length > 1) {
                 multiTract++;
             } else {
                 singleTract++;
@@ -137,7 +142,7 @@ exports.getReport = (req, res) => {
 
 
 
-        res.send({contacted: contacted, remaining: remaining, total: total.length, single: singleTract, multi: multiTract })
+        res.send({ contacted: contacted, remaining: remaining, total: total.length, single: singleTract, multi: multiTract })
 
 
     });
@@ -151,5 +156,18 @@ exports.updateTract = (req, res) => {
             res.send(err);
         console.log("Changed Tract to", tractData)
         res.send(tractData)
+    });
+}
+
+exports.getExcel = (req, res) => {
+    TractModel.getAllTracts((err, tracts) => {
+        var string = JSON.stringify(tracts);
+        var json = JSON.parse(string);
+
+        var newwb = xlsx.utils.book_new();
+        var newws = xlsx.utils.json_to_sheet(json);
+        xlsx.utils.book_append_sheet(newwb, newws, "New Data");
+        xlsx.writeFile(newwb, 'NewBook.xlsx');
+        res.sendFile(path.resolve('./NewBook.xlsx'), 'Wascana.xlsx');
     });
 }

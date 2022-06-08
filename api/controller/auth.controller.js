@@ -34,7 +34,7 @@ exports.Login = (req, res) => {
 // checks session to see if user is logged in
 exports.getLogin = (req, res) => {
     if (req.session.user) {
-        res.send({ loggedIn: true, user: req.session.user })
+        res.send({ auth: true, user: req.session.user })
     } else {
         ({ loggedIn: false })
     }

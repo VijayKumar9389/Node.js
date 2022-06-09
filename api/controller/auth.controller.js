@@ -10,8 +10,7 @@ exports.Login = (req, res) => {
     const tmp = req.body
     AuthModel.Login(tmp, (err, user) => {
         if (err)
-        res.send(err);
-
+            res.send(err);
         if (user.length > 0) {
             //decrypts password from the database 
             bcrypt.compare(tmp.password, user[0].PASSWORD, (err, response) => {
@@ -33,15 +32,25 @@ exports.Login = (req, res) => {
 
 // checks session to see if user is logged in
 exports.getLogin = (req, res) => {
-    if (req.session.user) {
-        res.send({ auth: true, user: req.session.user })
-    } else {
-        ({ loggedIn: false })
-    }
-}
 
+    const token = req.headers["x-access-token"];
+
+    if (!token) {
+        res.send({ auth: false })
+    } else {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
+            if (err) {
+                res.send({ auth: false })
+            } else {
+                res.send({ auth: true })
+            }
+        });
+    }
+
+
+}
 
 // logs user out
 exports.Logout = (req, res) => {
-        req.session.destroy();
+    req.session.destroy();
 }

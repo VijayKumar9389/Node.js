@@ -140,10 +140,7 @@ exports.getReport = (req, res) => {
 
         }
 
-
-
         res.send({ contacted: contacted, remaining: remaining, total: total.length, single: singleTract, multi: multiTract })
-
 
     });
 }
@@ -168,7 +165,10 @@ exports.getExcel = (req, res) => {
         var newws = xlsx.utils.json_to_sheet(json);
         xlsx.utils.book_append_sheet(newwb, newws, "New Data");
         xlsx.writeFile(newwb, 'NewBook.xlsx');
-        console.log('Testing: ', path.resolve('./NewBook.xlsx'))
         res.sendFile(path.resolve('./NewBook.xlsx'), 'Wascana.xlsx');
     });
 }
+
+// exports.compareBook = (req, res) => {
+//     res.send('hello')
+// }

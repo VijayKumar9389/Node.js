@@ -40,15 +40,15 @@ exports.getConnections = (req, res) => {
         //Grabs the requested stakeholders mailing and street address
         for (let y = 0; y < json.length; y++) {
             if (clientName === json[y].NAME) {
-                reqStreet = json[y].STREET;
-                reqMailing = json[y].MAILING;
+                reqStreet = json[y].STREET.trim();
+                reqMailing = json[y].MAILING.trim();
                 break;
             }
         }
 
         //checks each stakeholders adress
         for (let i = 0; i < json.length; i++) {
-            var stakeholderStreet = json[i].STREET;
+            var stakeholderStreet = json[i].STREET.trim();
             //checks if mailing or street address is a match
             if (reqStreet === stakeholderStreet) {
                 if (json[i].NAME !== clientName) {
@@ -61,7 +61,7 @@ exports.getConnections = (req, res) => {
 
         //checks each stakeholders adress
         for (let i = 0; i < json.length; i++) {
-            var stakeholderMailing = json[i].MAILING;
+            var stakeholderMailing = json[i].MAILING.trim();
             //checks if mailing or street address is a match
             if (reqMailing === stakeholderMailing) {
                 if (json[i].NAME !== clientName) {
@@ -126,7 +126,7 @@ exports.getConnections = (req, res) => {
                 }
             }
 
-            if (matchingAddress || matchingPhone) {
+            if (matchingAddress || matchingPhone || mathcingStreet) {
                 connections.push({ stakeholder: json[i], phone: matchingPhone, address: matchingAddress, street: mathcingStreet });
             }
 
@@ -154,7 +154,7 @@ exports.getAllLocations = (req, res) => {
 
             if (json[z].MAILING === '' && json[z].STREET === '') {
                 missing++;
-            } else if(locationChars.length < 3){
+            } else if (locationChars.length < 3) {
                 missing++;
             }
         }
@@ -169,7 +169,7 @@ exports.getAllLocations = (req, res) => {
                 var location = json[i].MAILING.split(',');
                 //if province/state is not in the list add it
                 if (!provinceList.includes(location[location.length - 2])) {
-                    if(location.length > 2){
+                    if (location.length > 2) {
                         provinceList.push(location[location.length - 2]);
                     }
                 }

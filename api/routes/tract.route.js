@@ -14,6 +14,7 @@ router.get('/name/:name', validateToken, tractController.getTractbyName);
 router.get('/cluster/:name', validateToken, tractController.getRelationCluster);
 router.get('/report', validateToken, tractController.getReport);
 router.put('/update', validateToken, tractController.updateTract);
-router.get('/getExcel/download', tractController.getExcel);
+router.get('/getExcel/download', validateToken, tractController.getExcel);
+// router.post('/excel/compare', validateToken, tractController.compareBook);
 
 module.exports = router;

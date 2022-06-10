@@ -139,9 +139,7 @@ exports.getReport = (req, res) => {
 
 
         }
-
-        res.send({ contacted: contacted, remaining: remaining, total: total.length, single: singleTract, multi: multiTract })
-
+        res.send({ contacted: contacted, remaining: remaining, total: total.length, single: singleTract, multi: multiTract });
     });
 }
 
@@ -169,6 +167,14 @@ exports.getExcel = (req, res) => {
     });
 }
 
-// exports.compareBook = (req, res) => {
-//     res.send('hello')
-// }
+exports.compareBook = (req, res) => {
+    if (req.file) {
+
+        let image = req.file.filename;
+        console.log(image)
+        res.send(image)
+    } else {
+        console.log('No File')
+        res.send('no file')
+    }
+}

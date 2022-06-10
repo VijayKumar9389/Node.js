@@ -1,9 +1,10 @@
 const AuthModel = require("../models/auth.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const session = require("express-session");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
+
+function generateAccessToken(user){
+    return jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '15m' });
+}
 
 //Login into account
 exports.Login = (req, res) => {
@@ -15,10 +16,9 @@ exports.Login = (req, res) => {
             //decrypts password from the database 
             bcrypt.compare(tmp.password, user[0].PASSWORD, (err, response) => {
                 if (response) {
-                    const id = user[0].ID;
-                    const token = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: 60 });
-                    req.session.user = user;
-                    res.send({ auth: true, token: token, user: req.session.user });
+                    const token = generateAccessToken(user);
+                    const refreshToken = jwt.sign({user}, process.env.JWT_SECRET, { expiresIn: '24hr' });
+                    res.send({ auth: true, token: token, refreshToken: refreshToken});
                     console.log(user[0].USERNAME + " Logged in successfully");
                 } else {
                     res.send({ auth: false, message: "Wrong username or password" });
@@ -33,7 +33,7 @@ exports.Login = (req, res) => {
 // checks session to see if user is logged in
 exports.getLogin = (req, res) => {
 
-    const token = req.headers["x-access-token"];
+    const token = req.headers["x-access-refresh-token"];
 
     if (!token) {
         res.send({ auth: false })
@@ -42,15 +42,18 @@ exports.getLogin = (req, res) => {
             if (err) {
                 res.send({ auth: false })
             } else {
-                res.send({ auth: true })
+                const accessToken = generateAccessToken({username: 'user'})
+                res.send({ auth: true, token: accessToken})
             }
         });
     }
-
-
 }
 
 // logs user out
 exports.Logout = (req, res) => {
     req.session.destroy();
 }
+
+// exports.Token = (req, res) => {
+//     const refreshToken = req.body.token;
+// }

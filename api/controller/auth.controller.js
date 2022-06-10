@@ -16,7 +16,7 @@ exports.Login = (req, res) => {
             bcrypt.compare(tmp.password, user[0].PASSWORD, (err, response) => {
                 if (response) {
                     const id = user[0].ID;
-                    const token = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 });
+                    const token = jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: 60 });
                     req.session.user = user;
                     res.send({ auth: true, token: token, user: req.session.user });
                     console.log(user[0].USERNAME + " Logged in successfully");

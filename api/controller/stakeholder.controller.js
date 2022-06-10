@@ -49,10 +49,10 @@ exports.getConnections = (req, res) => {
         //checks each stakeholders adress
         for (let i = 0; i < json.length; i++) {
             var stakeholderStreet = json[i].STREET.trim();
-            //checks if mailing or street address is a match
+            //checks if street address is a match
             if (reqStreet === stakeholderStreet) {
                 if (json[i].NAME !== clientName) {
-                    if (stakeholderMailing !== "" && stakeholderStreet !== "") {
+                    if (stakeholderStreet !== "") {
                         streetrelatives.push(json[i]);
                     }
                 }
@@ -62,10 +62,10 @@ exports.getConnections = (req, res) => {
         //checks each stakeholders adress
         for (let i = 0; i < json.length; i++) {
             var stakeholderMailing = json[i].MAILING.trim();
-            //checks if mailing or street address is a match
+            //checks if mailing address is a match
             if (reqMailing === stakeholderMailing) {
                 if (json[i].NAME !== clientName) {
-                    if (stakeholderMailing !== "" && stakeholderStreet !== "") {
+                    if (stakeholderMailing !== "") {
                         relatives.push(json[i]);
                     }
                 }

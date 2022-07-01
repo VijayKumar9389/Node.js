@@ -23,17 +23,6 @@ app.use(cors({
     credentials: true
 }));
 
-//Declare session  
-app.use(session({
-    key: "Token",
-    proxy: true,
-    secret: "Testing",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        Expires: 100
-    }
-}));
 
 // Routes
 app.get('/', (req, res) => {

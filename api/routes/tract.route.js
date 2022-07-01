@@ -6,6 +6,7 @@ const {validateToken} = require("../middleware/Auth");
 const { id } = require("../models/tract.model");
 const { tractNo } = require("../models/tract.model");
 const { name } = require("../models/tract.model");
+const Uploader = require('../middleware/upload');
 
 router.get('/', validateToken, tractController.getTractList);
 router.get('/id/:id', validateToken, tractController.getTractbyID);
@@ -15,6 +16,6 @@ router.get('/cluster/:name', validateToken, tractController.getRelationCluster);
 router.get('/report', validateToken, tractController.getReport);
 router.put('/update', validateToken, tractController.updateTract);
 router.get('/getExcel/download', validateToken, tractController.getExcel);
-router.post('/excel/compare', validateToken, tractController.compareBook);
+// router.post('/excel/compare', validateToken, Uploader.single('file'), tractController.compareBook);
 
 module.exports = router;

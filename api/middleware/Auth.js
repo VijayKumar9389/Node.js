@@ -3,10 +3,13 @@ require('dotenv').config();
 
 const validateToken = (req, res, next) => {
 
-    const token = req.headers["x-access-token"];
+    const token = req.headers["access-token"];
+    const user = jwt.decode(token);
+
+    console.log(user);
 
     if (!token) {
-        res.send("User not logged in");
+        res.send({auth: false, message: "User not logged in"});
     } else {
         jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
             if (err) {

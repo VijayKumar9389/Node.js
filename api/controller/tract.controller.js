@@ -3,7 +3,9 @@ const path = require('path');
 
 const TractModel = require("../models/tract.model");
 
-const HeadingJson = ['tractNo', 'pin', 'structure_type', 'interest', 'contact', 'name', 'street', 'mailing', 'phone', 'occupants', 'worked', 'contacted', 'attempts', 'consultation', 'followup', 'comments', 'keepdelete', 'commodity', 'pipelinestatus'];
+const HeadingJson = ['TRACT', 'PIN', 'STRUCTURE_TYPE', 'INTEREST', 'CONTACT', 'NAME', 'STREET', 'MAILING', 'PHONE', 'OCCUPANTS', 'WORKED', 'CONTACTED', 'ATTEMPTS', 'CONSULTATION', 'FOLLOWUP', 'COMMENTS', 'KEEPDELETE', 'COMMODITY', 'PIPLINESTATUS'];
+const HeadingBook = ['TRACT', 'PIN/ LEGAL', 'STRUCTURE TYPE/STATUS', 'INTEREST STATUS', 'CONTACT STATUS', 'NAME(S)', 'STREET ADDRESS', 'MAILING ADDRESS', "PHONE #'s", '# OF OCCUPANTS', 'WORKS LAND (Y/N)', 'CON- TACTED (Y/N)', 'ATTEMPT DETAILS', 'CONSULT-ATION DATE', 'FOLLOW UP (Y/N)', 'COMMENTS', 'KeepDelete', 'Commodity', 'PipelineStatus'];
+
 
 // get all tracts
 exports.getTractList = (req, res) => {
@@ -44,33 +46,48 @@ exports.getRelationCluster = (req, res) => {
 
         var string = JSON.stringify(tract);
         var json = JSON.parse(string);
-        var tmp = [];
-        var idList = []
+
+        var stakeholder = [];
+        var idList = [];
         var cluster = [];
 
         //Grabs all tracts under the requested name
         for (let index = 0; index < json.length; index++) {
             if (json[index].NAME === req.params.name) {
-                tmp.push(json[index])
+                stakeholder.push(json[index])
             }
         }
 
         //Adds records with matching tracts
-        for (let i = 0; i < tmp.length; i++) {
-            if (idList.includes(tmp[i].ID) === false) {
-                cluster.push(tmp[i])
+        for (let i = 0; i < stakeholder.length; i++) {
+
+            var tmp = [];
+
+            if (idList.includes(stakeholder[i].ID) === false) {
+
+                tmp.push(stakeholder[i]);
+
                 for (let y = 0; y < json.length; y++) {
                     //Checks for a mathcing tract number and ensures the record isnt a duplicate
-                    if (tmp[i].TRACT === json[y].TRACT && tmp[i].ID !== json[y].ID) {
+                    if (stakeholder[i].TRACT === json[y].TRACT && stakeholder[i].ID !== json[y].ID) {
                         if (idList.includes(json[y].ID) === false) {
-                            console.log(json[y].ID)
-                            cluster.push(json[y]);
+                            tmp.push(json[y]);
                             idList.push(json[y].ID);
                         }
                     }
                 }
             }
+
+            cluster.push(tmp);
         }
+
+        for (let index = 0; index < cluster.length; index++) {
+            if(cluster[index].length < 1) {
+                cluster.splice(index, 1)
+            }
+            
+        }
+
         res.send(cluster);
     });
 }
@@ -160,21 +177,53 @@ exports.getExcel = (req, res) => {
         var json = JSON.parse(string);
 
         var newwb = xlsx.utils.book_new();
-        var newws = xlsx.utils.json_to_sheet(json);
+        var newws = xlsx.utils.json_to_sheet(json, { defval: "" });
         xlsx.utils.book_append_sheet(newwb, newws, "New Data");
         xlsx.writeFile(newwb, 'NewBook.xlsx');
         res.sendFile(path.resolve('./NewBook.xlsx'), 'Wascana.xlsx');
     });
 }
 
-exports.compareBook = (req, res) => {
-    if (req.file) {
+// function createReport(book, db) {
 
-        let image = req.file.filename;
-        console.log(image)
-        res.send(image)
+//     const A = [];
+
+//     for (let index = 0; index < db.length; index++) {
+
+//         bookIndex = index++;
+
+//         if(book[bookIndex].NAME != db[index].NAME){
+
+//         }
+//     }
+
+//     console.log(A);
+
+//     var newwb = xlsx.utils.book_new();
+//     var newws = xlsx.utils.json_to_sheet(A);
+//     xlsx.utils.book_append_sheet(newwb, newws, "New Data");
+//     xlsx.writeFile(newwb, 'FinalBook.xlsx');
+// }
+
+exports.compareBook = (req, res) => {
+
+    if (!req.file) {
+
+        console.log('no file')
+        res.send({ msg: 'no file' });
+
     } else {
-        console.log('No File')
-        res.send('no file')
+        //grabs data from the recieved book
+        const wb = xlsx.readFile(path.resolve("./tmp/ProjectBook.xlsx"));
+        const ws = wb.Sheets["Copy of Wascana"];
+        const data = xlsx.utils.sheet_to_json(ws, { defval: "", skipHeader: true, header: HeadingJson });
+
+        //grabs data from the DB
+        TractModel.getAllTracts((err, tracts) => {
+            console.log("All Tracts are here");
+            if (err) res.send(err);
+            createReport(data, tracts);
+            res.send(tracts);
+        });
     }
 }

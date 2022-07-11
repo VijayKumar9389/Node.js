@@ -219,17 +219,26 @@ exports.getAllLocations = (req, res) => {
     });
 }
 
-
 // update stakeholder's information across the database by name
 exports.updateStakeholder = (req, res) => {
     const stakeholderData = req.body;
-    StakeholderModel.updateStakeholder(stakeholderData, (err, stakeholder) => {
-        console.log("Stakeholder updated");
-        if (err)
-            res.send(err);
-        console.log("Changed info to", stakeholderData);
-        res.send(stakeholderData);
-    });
+
+    if (stakeholderData.NEWNAME !== "") {
+        StakeholderModel.updateStakeholder(stakeholderData, (err, stakeholder) => {
+            console.log("Stakeholder updated");
+            if (err)
+                res.send(err);
+            console.log("Changed info to", stakeholderData);
+            res.send({ status: true })
+        });
+        
+    } else {
+        res.send({ status: false });
+    }
+
+    console.log(stakeholderData);
+
+
 }
 
 

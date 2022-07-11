@@ -6,7 +6,7 @@ const validateToken = (req, res, next) => {
     const token = req.headers["access-token"];
     const user = jwt.decode(token);
 
-    console.log(user);
+    // console.log(user);
 
     if (!token) {
         res.send({auth: false, message: "User not logged in"});

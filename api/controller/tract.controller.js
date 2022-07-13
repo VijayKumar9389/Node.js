@@ -115,6 +115,7 @@ exports.getReport = (req, res) => {
         var multiTract = 0;
         var contacted = 0;
         var remaining = 0;
+        var missingPhone = 0;
         var total = [];
         var stakeholderList = [];
 
@@ -126,11 +127,19 @@ exports.getReport = (req, res) => {
             }
         }
 
+        //grabs to number of stakeholders contacted and not
         for (let i = 0; i < total.length; i++) {
             if (total[i].CONTACTED !== 'YES') {
                 remaining++;
             } else {
                 contacted++;
+            }
+        }
+
+        //cehcks for missing phone numbers
+        for (let z = 0; z < total.length; z++) {
+            if (total[z].PHONE.length < 1){
+                missingPhone++;
             }
         }
 
@@ -153,10 +162,8 @@ exports.getReport = (req, res) => {
             } else {
                 singleTract++;
             }
-
-
         }
-        res.send({ contacted: contacted, remaining: remaining, total: total.length, single: singleTract, multi: multiTract });
+        res.send({ contacted: contacted, remaining: remaining, missingPhone: missingPhone, total: total.length, single: singleTract, multi: multiTract });
     });
 }
 
@@ -183,27 +190,6 @@ exports.getExcel = (req, res) => {
         res.sendFile(path.resolve('./NewBook.xlsx'), 'Wascana.xlsx');
     });
 }
-
-// function createReport(book, db) {
-
-//     const A = [];
-
-//     for (let index = 0; index < db.length; index++) {
-
-//         bookIndex = index++;
-
-//         if(book[bookIndex].NAME != db[index].NAME){
-
-//         }
-//     }
-
-//     console.log(A);
-
-//     var newwb = xlsx.utils.book_new();
-//     var newws = xlsx.utils.json_to_sheet(A);
-//     xlsx.utils.book_append_sheet(newwb, newws, "New Data");
-//     xlsx.writeFile(newwb, 'FinalBook.xlsx');
-// }
 
 exports.compareBook = (req, res) => {
 

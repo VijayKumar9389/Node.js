@@ -26,7 +26,7 @@ app.use(cors({
 
 // Routes
 app.get('/', (req, res) => {
-    res.send("SRM API Endpoint")
+    res.send("DASJH API Endpoint")
 });
 
 const tractRoutes = require("./api/routes/tract.route");

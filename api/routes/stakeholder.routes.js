@@ -5,7 +5,7 @@ const stakeholderController = require("../controller/stakeholder.controller");
 
 const { name } = require("../models/stakeholder.model");
 
-router.get('/', validateToken, stakeholderController.getStakeholderList);
+router.get('/',  stakeholderController.getStakeholderList);
 router.get('/:name', validateToken, stakeholderController.getStakeholderbyName);
 router.get('/connections/:name', validateToken, stakeholderController.getConnections);
 router.get('/sidebar/locations', validateToken, stakeholderController.getAllLocations);

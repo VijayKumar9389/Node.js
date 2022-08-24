@@ -223,6 +223,8 @@ exports.getAllLocations = (req, res) => {
 exports.updateStakeholder = (req, res) => {
     const stakeholderData = req.body;
 
+    console.log(stakeholderData)
+
     if (stakeholderData.NEWNAME !== "") {
         StakeholderModel.updateStakeholder(stakeholderData, (err, stakeholder) => {
             console.log("Stakeholder updated");

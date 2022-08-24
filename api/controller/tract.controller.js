@@ -17,6 +17,42 @@ exports.getTractList = (req, res) => {
     });
 }
 
+//Tract list seperated by tract number
+exports.getTractCluster = (req, res) => {
+    TractModel.getAllTracts((err, tracts) => {
+        console.log("All Tracts are here");
+        if (err)
+            res.send(err);
+
+        var string = JSON.stringify(tracts);
+        var json = JSON.parse(string);
+        var tractCluster = [];
+        var tractList = [];
+
+        for (let i = 0; i < json.length; i++) {
+            if (!tractList.includes(json[i].TRACT)) {
+                tractList.push(json[i].TRACT)
+            }
+        }
+
+        for (let z = 0; z < tractList.length; z++) {
+
+            var tmp = [];
+            var tractNo = tractList[z];
+
+            for (let y = 0; y < json.length; y++) {
+                if (json[y].TRACT === tractNo) {
+                    tmp.push(json[y]);
+                }
+            }
+
+            tractCluster.push(tmp);
+        }
+
+        res.send(tractCluster);
+    });
+}
+
 // get all tracts by id
 exports.getTractbyID = (req, res) => {
     TractModel.getTractbyID(req.params.id, (err, tract) => {
@@ -82,10 +118,10 @@ exports.getRelationCluster = (req, res) => {
         }
 
         for (let index = 0; index < cluster.length; index++) {
-            if(cluster[index].length < 1) {
+            if (cluster[index].length < 1) {
                 cluster.splice(index, 1)
             }
-            
+
         }
 
         res.send(cluster);
@@ -138,7 +174,7 @@ exports.getReport = (req, res) => {
 
         //cehcks for missing phone numbers
         for (let z = 0; z < total.length; z++) {
-            if (total[z].PHONE.length < 1){
+            if (total[z].PHONE.length < 1) {
                 missingPhone++;
             }
         }

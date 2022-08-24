@@ -10,10 +10,13 @@ var Stakeholder = (stakeholder) => {
     this.attempts = stakeholder.attempts;
     this.consultation = stakeholder.consultation;
     this.followup = stakeholder.followup;
+    this.email = stakeholder.email;
+    this.stakeholdercomment = stakeholder.stakeholdercomment;
+    this.corperation = stakeholder.corperation;
 }
 
 Stakeholder.getAllStakeholders = (result) => {
-    Connection.query(`SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, COUNT(*) as count FROM ${process.env.TABLE} group by NAME`, (err, res) => {
+    Connection.query(`SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, EMAIL, STAKEHOLDERCOMMENT, CORPERATION, COUNT(*) as count FROM ${process.env.TABLE} group by NAME`, (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);
@@ -37,8 +40,8 @@ Stakeholder.getStakeholderbyName = (name, result) => {
 }
 
 Stakeholder.updateStakeholder = (stakeholderData, result) => {
-    Connection.query(`UPDATE ${process.env.TABLE} set NAME = ?, CONTACT = ?, STREET = ?, MAILING = ?, PHONE = ?,  CONTACTED = ?, ATTEMPTS = ?, CONSULTATION = ?, FOLLOWUP = ? WHERE name = ?`, 
-    [stakeholderData.NEWNAME, stakeholderData.CONTACTSTATUS, stakeholderData.STREET, stakeholderData.MAILING, stakeholderData.PHONE, stakeholderData.CONTACTED, stakeholderData.ATTEMPTS, stakeholderData.CONSULTATION, stakeholderData.FOLLOWUP, stakeholderData.NAME], 
+    Connection.query(`UPDATE ${process.env.TABLE} set NAME = ?, CONTACT = ?, STREET = ?, MAILING = ?, PHONE = ?,  CONTACTED = ?, ATTEMPTS = ?, CONSULTATION = ?, FOLLOWUP = ?, EMAIL = ?, STAKEHOLDERCOMMENT = ?, CORPERATION = ? WHERE name = ?`, 
+    [stakeholderData.NEWNAME, stakeholderData.CONTACTSTATUS, stakeholderData.STREET, stakeholderData.MAILING, stakeholderData.PHONE, stakeholderData.CONTACTED, stakeholderData.ATTEMPTS, stakeholderData.CONSULTATION, stakeholderData.FOLLOWUP, stakeholderData.EMAIL, stakeholderData.STAKEHOLDERCOMMENT, stakeholderData.CORPERATION,  stakeholderData.NAME], 
     (err, res) => {
         if (err) {
             console.log('error');

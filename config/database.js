@@ -2,7 +2,7 @@ const mysql = require('mysql');
 require('dotenv').config();
 
 //connects to database
-const connection = mysql.createPool({
+const connection = mysql.createConnection({
     host: process.env.HOST,
     user: 'root',
     password: process.env.PASSWORD,
@@ -10,7 +10,7 @@ const connection = mysql.createPool({
 });
 
 //tests connection
-connection.getConnection(function(error) {
+connection.connect(function(error) {
     if(error){
         console.log("Error connecting to the Database");
         console.log(error);

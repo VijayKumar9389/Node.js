@@ -25,7 +25,7 @@ app.use(cors({
 
 // Routes
 app.get('/', (req, res) => {
-    res.send("API Endpoint")
+    res.send("API Endpoint Testing")
 });
 
 const tractRoutes = require("./api/routes/tract.route");

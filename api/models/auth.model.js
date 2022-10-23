@@ -17,4 +17,16 @@ User.Login = (user, result) => {
     });
 }
 
+User.getUsers = (result) => {
+    Connection.query("select username from users", (err, res) => {
+        if (err) {
+            console.log(err);
+            result(null, err);
+        } else {
+            console.log("Returned All Users");
+            result(null, res);
+        }
+    });
+}
+
 module.exports = User;

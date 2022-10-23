@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const session = require("express-session");
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -26,7 +25,7 @@ app.use(cors({
 
 // Routes
 app.get('/', (req, res) => {
-    res.send("DASJH API Endpoint")
+    res.send("API Endpoint")
 });
 
 const tractRoutes = require("./api/routes/tract.route");
@@ -34,6 +33,9 @@ app.use('/api/tracts', tractRoutes);
 
 const stakerholderRoutes = require("./api/routes/stakeholder.routes");
 app.use('/api/stakeholders', stakerholderRoutes);
+
+const LogRoutes = require("./api/routes/log.routes");
+app.use('/api/logs', LogRoutes);
 
 const authRoutes = require("./api/routes/auth.routes");
 app.use('/api/auth/', authRoutes);

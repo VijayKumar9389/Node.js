@@ -69,3 +69,12 @@ exports.Logout = (req, res) => {
     const token = req.headers["refresh-token"];
 }
 
+exports.getUsers = (req, res) => {
+    AuthModel.getUsers((err, users) => {
+        if (err)
+            res.send(err);
+        console.log("stakeholders", users)
+        res.send(users);
+    });
+}
+

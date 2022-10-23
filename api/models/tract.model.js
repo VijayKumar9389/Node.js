@@ -59,6 +59,21 @@ Tract.getTractbyNo = (tractNo, result) => {
     });
 }
 
+Tract.getAdjacentTractby = (tractNo, result) => {
+
+    let TractOne = tractNo++;
+    let TractTwo = tractNo--;
+
+    Connection.query(`SELECT * from ${process.env.TABLE} where tract=?`, tractNo, (err, res)=>{
+        if(err){
+            console.log('Error fetching tract by number');
+            result(null, err);
+        } else {
+            result(null, res);
+        }
+    });
+}
+
 Tract.getTractbyName = (name, result) => {
     Connection.query(`SELECT * from ${process.env.TABLE} where name=?`, name, (err, res)=>{
         if(err){

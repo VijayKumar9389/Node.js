@@ -8,13 +8,13 @@ const { tractNo } = require("../models/tract.model");
 const { name } = require("../models/tract.model");
 const Uploader = require('../middleware/upload');
 
-router.get('/', tractController.getTractList);
+router.get('/', validateToken, tractController.getTractList);
 router.get('/tractCluster', validateToken, tractController.getTractCluster);
 router.get('/id/:id', validateToken, tractController.getTractbyID);
 router.get('/tractNo/:tractNo', validateToken, tractController.getTractbyNo);
 router.get('/name/:name', validateToken, tractController.getTractbyName);
 router.get('/cluster/:name', validateToken, tractController.getRelationCluster);
-router.get('/report', tractController.getReport);
+router.get('/report', validateToken, tractController.getReport);
 router.put('/update', validateToken, tractController.updateTract);
 router.get('/getExcel/download', validateToken, tractController.getExcel);
 router.post('/excel/compare', tractController.compareBook);

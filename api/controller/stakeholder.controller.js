@@ -9,7 +9,7 @@ exports.getStakeholderList = (req, res) => {
         if (err)
             res.send(err);
         // console.log("stakeholders", stakeholders)
-        res.send(stakeholders[0]);
+        res.send(stakeholders);
     });
 
 }

@@ -23,7 +23,6 @@ app.use(cors({
     credentials: true
 }));
 
-
 // Routes
 app.get('/', (req, res) => {
     res.send("Triton Server Endpoint")

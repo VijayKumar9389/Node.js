@@ -14,7 +14,7 @@ router.get('/id/:id', validateToken, tractController.getTractbyID);
 router.get('/tractNo/:tractNo', validateToken, tractController.getTractbyNo);
 router.get('/name/:name', validateToken, tractController.getTractbyName);
 router.get('/cluster/:name', validateToken, tractController.getRelationCluster);
-router.get('/report', validateToken, tractController.getReport);
+router.get('/report', tractController.getReport);
 router.put('/update', validateToken, tractController.updateTract);
 router.get('/getExcel/download', validateToken, tractController.getExcel);
 router.post('/excel/compare', tractController.compareBook);

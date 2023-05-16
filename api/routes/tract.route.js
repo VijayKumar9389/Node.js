@@ -8,7 +8,7 @@ const { tractNo } = require("../models/tract.model");
 const { name } = require("../models/tract.model");
 const Uploader = require('../middleware/upload');
 
-router.get('/', validateToken, tractController.getTractList);
+router.get('/', tractController.getTractList);
 router.get('/tractCluster', validateToken, tractController.getTractCluster);
 router.get('/id/:id', validateToken, tractController.getTractbyID);
 router.get('/tractNo/:tractNo', validateToken, tractController.getTractbyNo);

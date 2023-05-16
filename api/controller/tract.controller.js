@@ -14,7 +14,7 @@ exports.getTractList = (req, res) => {
         console.log("All Tracts are here");
         if (err)
             res.send(err);
-        res.send(tracts);
+        res.send(tracts[0]);
     });
 }
 

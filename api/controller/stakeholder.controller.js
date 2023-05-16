@@ -5,7 +5,7 @@ exports.getStakeholderList = (req, res) => {
 
     const table = req.reqTable;
 
-    StakeholderModel.getAllStakeholders(table, (err, stakeholders) => {
+    StakeholderModel.getAllStakeholders((err, stakeholders) => {
         if (err)
             res.send(err);
         // console.log("stakeholders", stakeholders)

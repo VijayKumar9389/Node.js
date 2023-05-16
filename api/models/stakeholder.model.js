@@ -15,9 +15,8 @@ var Stakeholder = (stakeholder) => {
     this.corperation = stakeholder.corperation;
 }
 
-Stakeholder.getAllStakeholders = (table, result) => {
-    console.log(table)
-    Connection.query(`SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, EMAIL, STAKEHOLDERCOMMENT, CORPERATION, COUNT(*) as count FROM ${process.env.TABLE} group by NAME`, table, (err, res) => {
+Stakeholder.getAllStakeholders = ( result) => {
+    Connection.query(`SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, EMAIL, STAKEHOLDERCOMMENT, CORPERATION, COUNT(*) as count FROM ${process.env.TABLE} group by NAME`, (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);

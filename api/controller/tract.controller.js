@@ -2,6 +2,7 @@ const xlsx = require('xlsx');
 const path = require('path');
 
 const TractModel = require("../models/tract.model");
+const { type } = require('os');
 
 const HeadingJson = ['TRACT', 'PIN', 'STRUCTURE_TYPE', 'INTEREST', 'CONTACT', 'NAME', 'STREET', 'MAILING', 'PHONE', 'OCCUPANTS', 'WORKED', 'CONTACTED', 'ATTEMPTS', 'CONSULTATION', 'FOLLOWUP', 'COMMENTS', 'KEEPDELETE', 'COMMODITY', 'PIPLINESTATUS'];
 const HeadingBook = ['TRACT', 'PIN/ LEGAL', 'STRUCTURE TYPE/STATUS', 'INTEREST STATUS', 'CONTACT STATUS', 'NAME(S)', 'STREET ADDRESS', 'MAILING ADDRESS', "PHONE #'s", '# OF OCCUPANTS', 'WORKS LAND (Y/N)', 'CON- TACTED (Y/N)', 'ATTEMPT DETAILS', 'CONSULT-ATION DATE', 'FOLLOW UP (Y/N)', 'COMMENTS', 'KeepDelete', 'Commodity', 'PipelineStatus'];
@@ -186,6 +187,8 @@ exports.getReport = (req, res) => {
         var singleTract = 0;
         var multiTract = 0;
         var contacted = 0;
+        var attempted = 0;
+        var noAttempts = 0;
         var remaining = 0;
         var missingPhone = 0;
         var total = [];
@@ -205,6 +208,15 @@ exports.getReport = (req, res) => {
                 remaining++;
             } else {
                 contacted++;
+            }
+        }
+
+        //grabs to number of stakeholders attempted and not
+        for (let i = 0; i < total.length; i++) {
+            if (total[i].ATTEMPTS !== '') {
+                attempted++;
+            } else {
+                noAttempts++;
             }
         }
 
@@ -265,23 +277,14 @@ exports.getExcel = (req, res) => {
 
 exports.compareBook = (req, res) => {
 
-    if (!req.file) {
+    const arr = req.body.data.project;
+    var string = JSON.stringify(arr);
+    var json = JSON.parse(string);
+    console.log(json)
 
-        console.log('no file')
-        res.send({ msg: 'no file' });
-
-    } else {
-        //grabs data from the recieved book
-        const wb = xlsx.readFile(path.resolve("./tmp/ProjectBook.xlsx"));
-        const ws = wb.Sheets["Copy of Wascana"];
-        const data = xlsx.utils.sheet_to_json(ws, { defval: "", skipHeader: true, header: HeadingJson });
-
-        //grabs data from the DB
-        TractModel.getAllTracts((err, tracts) => {
-            console.log("All Tracts are here");
-            if (err) res.send(err);
-            createReport(data, tracts);
-            res.send(tracts);
-        });
-    }
+    var newwb = xlsx.utils.book_new();
+    var newws = xlsx.utils.json_to_sheet(json, { defval: "" });
+    xlsx.utils.book_append_sheet(newwb, newws, "New Data");
+    xlsx.writeFile(newwb, 'NewBook.xlsx');
+    res.sendFile(path.resolve('./NewBook.xlsx'), 'Wascana.xlsx');
 }

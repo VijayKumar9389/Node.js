@@ -3,6 +3,7 @@ var Connection = require('../../config/database');
 var User = (user) => {
     this.username = user.username;
     this.password = user.password;
+    this.project = user.project;
 }
 
 User.Login = (user, result) => {

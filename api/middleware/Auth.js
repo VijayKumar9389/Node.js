@@ -15,6 +15,7 @@ const validateToken = (req, res, next) => {
             } else {
                 console.log("token verified")
                 req.reqUser = user.user.USERNAME;
+                req.reqTable = user.user.PROJECT;
                 next();
             }
         });

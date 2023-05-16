@@ -2,12 +2,16 @@ const StakeholderModel = require("../models/stakeholder.model");
 
 // get all stakeholders
 exports.getStakeholderList = (req, res) => {
-    StakeholderModel.getAllStakeholders((err, stakeholders) => {
+
+    const table = req.reqTable;
+
+    StakeholderModel.getAllStakeholders(table, (err, stakeholders) => {
         if (err)
             res.send(err);
-        console.log("stakeholders", stakeholders)
+        // console.log("stakeholders", stakeholders)
         res.send(stakeholders);
     });
+
 }
 
 // get stakeholder by name

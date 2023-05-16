@@ -36,6 +36,7 @@ exports.getLogExcel = (req, res) => {
     LogModel.getAllLogs((err, logs) => {
         var string = JSON.stringify(logs);
         var json = JSON.parse(string);
+        console.log(json)
 
         var newwb = xlsx.utils.book_new();
         var newws = xlsx.utils.json_to_sheet(json, { defval: "" });

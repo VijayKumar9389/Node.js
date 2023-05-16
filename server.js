@@ -7,7 +7,8 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 //recognize incoming request as a JSON Object
-app.use(express.json());
+
+app.use(express.json({limit: '50mb'}));
 
 // parses cookies attached in the client request
 app.use(cookieParser());

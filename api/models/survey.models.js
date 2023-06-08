@@ -48,7 +48,7 @@ Survey.enterSurvey = (formData, result) => {
 };
 
 Survey.getSurvey = (stakeholder, result) => {
-    Connection.query("select * from Bodo_2023_Survey Where stakeholder = ?", stakeholder, (err, res) => {
+    Connection.query("select * from Bodo_2023_survey Where stakeholder = ?", stakeholder, (err, res) => {
         if (err) {
             console.log(err);
             result(null, err);

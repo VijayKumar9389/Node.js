@@ -40,6 +40,10 @@ app.use('/api/logs', LogRoutes);
 const authRoutes = require("./api/routes/auth.routes");
 app.use('/api/auth/', authRoutes);
 
+const surveyRoutes = require("./api/routes/survey.routes");
+app.use('/api/survey/', surveyRoutes);
+
+
 app.listen(PORT, () => {
     console.log(`App is running on port ${PORT}`);
 });

@@ -223,6 +223,24 @@ exports.getAllLocations = (req, res) => {
     });
 }
 
+exports.getStakeholderbyRoute = (req, res) => {
+
+    const route = req.params.route;
+
+    StakeholderModel.getAllStakeholders((err, stakeholders) => {
+        if (err)
+            res.send(err);
+
+        var string = JSON.stringify(stakeholders);
+        var json = JSON.parse(string);
+
+        console.log(json);
+
+        res.send(stakeholders);
+    });
+
+}
+
 // update stakeholder's information across the database by name
 exports.updateStakeholder = (req, res) => {
     const stakeholderData = req.body;

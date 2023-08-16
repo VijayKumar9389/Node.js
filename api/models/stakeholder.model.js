@@ -13,6 +13,8 @@ var Stakeholder = (stakeholder) => {
     this.email = stakeholder.email;
     this.stakeholdercomment = stakeholder.stakeholdercomment;
     this.corperation = stakeholder.corperation;
+    this.route = stakeholder.route;
+    this.location = stakeholder.location;
 }
 
 Stakeholder.getAllStakeholders = (result) => {
@@ -40,14 +42,26 @@ Stakeholder.getStakeholderbyName = (name, result) => {
 }
 
 Stakeholder.updateStakeholder = (stakeholderData, result) => {
-    Connection.query(`UPDATE ${process.env.TABLE} set NAME = ?, CONTACT = ?, STREET = ?, MAILING = ?, PHONE = ?,  CONTACTED = ?, ATTEMPTS = ?, CONSULTATION = ?, FOLLOWUP = ?, EMAIL = ?, STAKEHOLDERCOMMENT = ?, CORPERATION = ?, ROUTE = ?, LOCATION = ? WHERE name = ?`, 
-    [stakeholderData.NEWNAME, stakeholderData.CONTACTSTATUS, stakeholderData.STREET, stakeholderData.MAILING, stakeholderData.PHONE, stakeholderData.CONTACTED, stakeholderData.ATTEMPTS, stakeholderData.CONSULTATION, stakeholderData.FOLLOWUP, stakeholderData.EMAIL, stakeholderData.STAKEHOLDERCOMMENT, stakeholderData.CORPERATION, stakeholderData.ROUTE, stakeholderData.LOCATION, stakeholderData.NAME], 
-    (err, res) => {
+    Connection.query(`UPDATE ${process.env.TABLE} set NAME = ?, CONTACT = ?, STREET = ?, MAILING = ?, PHONE = ?,  CONTACTED = ?, ATTEMPTS = ?, CONSULTATION = ?, FOLLOWUP = ?, EMAIL = ?, STAKEHOLDERCOMMENT = ?, CORPERATION = ?, ROUTE = ?, LOCATION = ? WHERE name = ?`,
+        [stakeholderData.NEWNAME, stakeholderData.CONTACTSTATUS, stakeholderData.STREET, stakeholderData.MAILING, stakeholderData.PHONE, stakeholderData.CONTACTED, stakeholderData.ATTEMPTS, stakeholderData.CONSULTATION, stakeholderData.FOLLOWUP, stakeholderData.EMAIL, stakeholderData.STAKEHOLDERCOMMENT, stakeholderData.CORPERATION, stakeholderData.ROUTE, stakeholderData.LOCATION, stakeholderData.NAME],
+        (err, res) => {
+            if (err) {
+                console.log('error');
+                result(null, err);
+            } else {
+                console.log("Stakeholder fetched successfully");
+                result(null, res);
+            }
+        });
+}
+
+Stakeholder.getRoutes = (result) => {
+    Connection.query(`SELECT ROUTE FROM ${process.env.TABLE} WHERE TRIM(ROUTE) <> '' GROUP BY ROUTE`, (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);
         } else {
-            console.log("Stakeholder fetched successfully");
+            console.log("Routes fetched successfully");
             result(null, res);
         }
     });

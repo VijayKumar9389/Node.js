@@ -11,8 +11,17 @@ exports.getStakeholderList = (req, res) => {
         // console.log("stakeholders", stakeholders)
         res.send(stakeholders);
     });
-
 }
+
+exports.getRoutes = (req, res) => {
+    StakeholderModel.getRoutes((err, routes) => {
+        if (err)
+            res.send(err);
+        // console.log("stakeholders", stakeholders)
+        res.send(routes);
+    });
+}
+
 
 // get stakeholder by name
 exports.getStakeholderbyName = (req, res) => {
@@ -24,121 +33,142 @@ exports.getStakeholderbyName = (req, res) => {
     });
 }
 
-// get stakeholders who share the same street or mailing address as the requested stakeholder
-exports.getConnections = (req, res) => {
-    StakeholderModel.getAllStakeholders((err, stakeholder) => {
-        if (err)
-            res.send(err);
+    // get stakeholders who share the same street or mailing address as the requested stakeholder
+    exports.getConnections = (req, res) => {
+        StakeholderModel.getAllStakeholders((err, stakeholder) => {
+            if (err)
+                res.send(err);
 
-        var string = JSON.stringify(stakeholder);
-        var json = JSON.parse(string);
-        var clientName = req.params.name;
-        var reqStreet;
-        var reqMailing;
-        var Phonerelatives = [];
-        var clientNumberList;
-        var relatives = [];
-        var streetrelatives = [];
-        var connections = [];
+            var string = JSON.stringify(stakeholder);
+            var json = JSON.parse(string);
+            var clientName = req.params.name;
+            var reqStreet;
+            var reqMailing;
+            var reqDelivery;
+            var Phonerelatives = [];
+            var clientNumberList;
+            var relatives = [];
+            var streetrelatives = [];
+            var deliveryrelatives = [];
+            var connections = [];
 
-        //Grabs the requested stakeholders mailing and street address
-        for (let y = 0; y < json.length; y++) {
-            if (clientName === json[y].NAME) {
-                reqStreet = json[y].STREET.trim();
-                reqMailing = json[y].MAILING.trim();
-                break;
+            //Grabs the requested stakeholders mailing and street address
+            for (let y = 0; y < json.length; y++) {
+                if (clientName === json[y].NAME) {
+                    reqStreet = json[y].STREET.trim();
+                    reqMailing = json[y].MAILING.trim();
+                    reqDelivery = json[y].LOCATION.trim();
+                    console.log(reqDelivery)
+                    break;
+                }
             }
-        }
 
-        //checks each stakeholders adress
-        for (let i = 0; i < json.length; i++) {
-            var stakeholderStreet = json[i].STREET.trim();
-            //checks if street address is a match
-            if (reqStreet === stakeholderStreet) {
-                if (json[i].NAME !== clientName) {
-                    if (stakeholderStreet !== "") {
-                        streetrelatives.push(json[i]);
+            //checks each stakeholders adress
+            for (let i = 0; i < json.length; i++) {
+                var stakeholderStreet = json[i].STREET.trim();
+                //checks if street address is a match
+                if (reqStreet === stakeholderStreet) { 
+                    if (json[i].NAME !== clientName) {
+                        if (stakeholderStreet !== "") {
+                            streetrelatives.push(json[i]);
+                        }
                     }
                 }
             }
-        }
 
-        //checks each stakeholders adress
-        for (let i = 0; i < json.length; i++) {
-            var stakeholderMailing = json[i].MAILING.trim();
-            //checks if mailing address is a match
-            if (reqMailing === stakeholderMailing) {
-                if (json[i].NAME !== clientName) {
-                    if (stakeholderMailing !== "") {
-                        relatives.push(json[i]);
+            for (let i = 0; i < json.length; i++) {
+                var stakeholderDelivery = json[i].LOCATION.trim();
+                if(reqDelivery === stakeholderDelivery) {
+                    if (json[i].NAME !== clientName) {
+                        if (stakeholderDelivery !== "") {
+                            deliveryrelatives.push(json[i]);
+                        }
                     }
                 }
             }
-        }
 
-        //Grabs the requested stakeholders number
-        for (let y = 0; y < json.length; y++) {
-            if (clientName === json[y].NAME) {
-                clientNumberList = json[y].PHONE.split(',');
-                break;
+            //checks each stakeholders adress
+            for (let i = 0; i < json.length; i++) {
+                var stakeholderMailing = json[i].MAILING.trim();
+                //checks if mailing address is a match
+                if (reqMailing === stakeholderMailing) {
+                    if (json[i].NAME !== clientName) {
+                        if (stakeholderMailing !== "") {
+                            relatives.push(json[i]);
+                        }
+                    }
+                }
             }
-        }
 
-        //Confirms Theres a valid Phone No
-        if (clientNumberList !== undefined) {
-            //Grabs each number from the requested stakeholder 
-            for (let i = 0; i < clientNumberList.length; i++) {
-                var clientNumber = clientNumberList[i].split(':');
-                //Splits each number
-                for (let y = 0; y < json.length; y++) {
-                    var searchNoList = json[y].PHONE.split(',');
-                    //compares each number to the requested stakeholders
-                    for (let x = 0; x < searchNoList.length; x++) {
-                        var searchNo = searchNoList[x].split(':');
-                        if (json[y].NAME !== clientName && json[y].PHONE !== "") {
-                            if (clientNumber[1] === searchNo[1]) {
-                                Phonerelatives.push(json[y]);
+            //Grabs the requested stakeholders number
+            for (let y = 0; y < json.length; y++) {
+                if (clientName === json[y].NAME) {
+                    clientNumberList = json[y].PHONE.split(',');
+                    break;
+                }
+            }
+
+            //Confirms Theres a valid Phone No
+            if (clientNumberList !== undefined) {
+                //Grabs each number from the requested stakeholder 
+                for (let i = 0; i < clientNumberList.length; i++) {
+                    var clientNumber = clientNumberList[i].split(':');
+                    //Splits each number
+                    for (let y = 0; y < json.length; y++) {
+                        var searchNoList = json[y].PHONE.split(',');
+                        //compares each number to the requested stakeholders
+                        for (let x = 0; x < searchNoList.length; x++) {
+                            var searchNo = searchNoList[x].split(':');
+                            if (json[y].NAME !== clientName && json[y].PHONE !== "") {
+                                if (clientNumber[1] === searchNo[1]) {
+                                    Phonerelatives.push(json[y]);
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
 
-        //Creates an array with each connection type for any related stakeholders
-        for (let i = 0; i < json.length; i++) {
-            let matchingPhone = false;
-            let matchingAddress = false;
-            let mathcingStreet = false;
+            //Creates an array with each connection type for any related stakeholders
+            for (let i = 0; i < json.length; i++) {
+                let matchingPhone = false;
+                let matchingAddress = false;
+                let mathcingStreet = false;
+                let matchingDelivery = false;
 
-            for (let y = 0; y < Phonerelatives.length; y++) {
-                if (Phonerelatives[y].NAME === json[i].NAME) {
-                    matchingPhone = true;
+                for (let y = 0; y < Phonerelatives.length; y++) {
+                    if (Phonerelatives[y].NAME === json[i].NAME) {
+                        matchingPhone = true;
+                    }
                 }
-            }
 
-            for (let x = 0; x < relatives.length; x++) {
-                if (relatives[x].NAME === json[i].NAME) {
-                    matchingAddress = true;
+                for (let x = 0; x < relatives.length; x++) {
+                    if (relatives[x].NAME === json[i].NAME) {
+                        matchingAddress = true;
+                    }
                 }
-            }
 
-            for (let x = 0; x < streetrelatives.length; x++) {
-                if (streetrelatives[x].NAME === json[i].NAME) {
-                    mathcingStreet = true;
+                for (let x = 0; x < streetrelatives.length; x++) {
+                    if (streetrelatives[x].NAME === json[i].NAME) {
+                        mathcingStreet = true;
+                    }
                 }
+
+                for (let x = 0; x < deliveryrelatives.length; x++) {
+                    if (deliveryrelatives[x].NAME === json[i].NAME) {
+                        matchingDelivery = true;
+                    }
+                }
+
+                if (matchingAddress || matchingPhone || mathcingStreet || matchingDelivery) {
+                    connections.push({ stakeholder: json[i], phone: matchingPhone, address: matchingAddress, street: mathcingStreet, delivery: matchingDelivery });
+                }
+
             }
-
-            if (matchingAddress || matchingPhone || mathcingStreet) {
-                connections.push({ stakeholder: json[i], phone: matchingPhone, address: matchingAddress, street: mathcingStreet });
-            }
-
-        }
-        res.send(connections);
-    });
-}
-
+            res.send(connections);
+        });
+    }
 // compiles a list of provinces/states and the citites within them
 exports.getAllLocations = (req, res) => {
     StakeholderModel.getAllStakeholders((err, stakeholder) => {

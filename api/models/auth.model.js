@@ -31,7 +31,7 @@ User.getUsers = (result) => {
 }
 
 User.getProjects = (result) => {
-    Connection.query(`show tables where tables_in_srm REGEXP '^[A-Za-z]+_[0-9]{4}$'`, (err, res) => {
+    Connection.query(`show tables where ${process.env.DATABASENAME} REGEXP '^[A-Za-z]+_[0-9]{4}$'`, (err, res) => {
         if (err) {
             console.log(err);
             result(null, err);

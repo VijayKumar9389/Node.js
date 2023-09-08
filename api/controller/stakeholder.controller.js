@@ -178,7 +178,7 @@ exports.getRelations = (req, res) => {
         var json = JSON.parse(string);
         var clientName = req.params.name;
         const connections = [];
-        
+
 
 
         for (let i = 0; i < json.length; i++) {
@@ -186,12 +186,10 @@ exports.getRelations = (req, res) => {
             let client = getLastNames(json[i].NAME);
             let target = getLastNames(clientName);
 
-            if (hasCommonElement(client, target) && json[i].NAME !== clientName){ 
+            if (hasCommonElement(client, target) && json[i].NAME !== clientName) {
                 console.log(json[i].NAME + " is related to " + clientName);
                 connections.push(json[i]);
             }
-            
-
         }
 
         res.send(connections);
@@ -207,13 +205,13 @@ function hasCommonElement(arr1, arr2) {
 
 function getLastNames(name) {
     const parts = name.split(/[:,]+/);
-    const toRemove = ["ATTN", "HOLDINGS", "ATTN:", "LIMITED", "FARMS", "INC"];
+    const toRemove = ["ATTN", "HOLDINGS", "ATTN:", "LIMITED", "FARMS"];
     const lastNames = [];
 
     for (let i = 0; i < parts.length; i++) {
         let fullName = parts[i].split(" ");
         const lastName = fullName[fullName.length - 1];
-        
+
         // Check if lastName exists in the toRemove array
         if (!toRemove.includes(lastName)) {
             lastNames.push(lastName);

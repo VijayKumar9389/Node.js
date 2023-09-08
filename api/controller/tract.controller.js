@@ -253,7 +253,7 @@ exports.getReport = (req, res) => {
 
 exports.updateTract = (req, res) => {
     const tractData = req.body
-    TractModel.updateTract(tractData, (err, stakeholder) => {
+    TractModel.updateTract({data: tractData, project: req.params.project}, (err, stakeholder) => {
         console.log("Tract updated");
         if (err)
             res.send(err);

@@ -16,8 +16,8 @@ router.get('/tractNo/:tractNo', validateToken, tractController.getTractbyNo);
 router.get('/name/:name', validateToken, tractController.getTractbyName);
 router.get('/cluster/:name/:project', validateToken, tractController.getRelationCluster);
 router.get('/report/:project', validateToken, tractController.getReport);
-router.put('/update', validateToken, tractController.updateTract);
+router.put('/update/:project', validateToken, tractController.updateTract);
 router.get('/getExcel/download', validateToken, tractController.getExcel);
-router.post('/excel/compare', tractController.compareBook);
+router.post('/excel/compare', validateToken, tractController.compareBook);
 
 module.exports = router;

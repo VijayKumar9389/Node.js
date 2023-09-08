@@ -98,8 +98,8 @@ Tract.getRelationCluster = (data, result) => {
 }
 
 Tract.updateTract = (tractData, result) => {
-    Connection.query(`UPDATE ${process.env.TABLE} set STRUCTURE_TYPE = ?, INTEREST = ?, OCCUPANTS = ?, WORKED = ?, COMMENTS = ? WHERE ID = ?`, 
-    [tractData.STRUCTURE_TYPE, tractData.INTEREST, tractData.OCCUPANTS, tractData.WORKED, tractData.COMMENTS, tractData.ID], 
+    Connection.query(`UPDATE ${tractData.project} set STRUCTURE_TYPE = ?, INTEREST = ?, OCCUPANTS = ?, WORKED = ?, COMMENTS = ? WHERE ID = ?`, 
+    [tractData.data.STRUCTURE_TYPE, tractData.data.INTEREST, tractData.data.OCCUPANTS, tractData.data.WORKED, tractData.data.COMMENTS, tractData.data.ID], 
     (err, res) => {
         if (err) {
             console.log('error');

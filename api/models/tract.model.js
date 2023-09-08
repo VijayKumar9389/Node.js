@@ -23,8 +23,8 @@ var Tract = (tract) => {
     this.pipelinestatus = tract.pipelinestatus;
 }
 
-Tract.getAllTracts = (result) => {
-    Connection.query(`select * from ${process.env.TABLE}`, (err, res) => {
+Tract.getAllTracts = (project, result) => {
+    Connection.query(`select * from ${project}`, (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);
@@ -85,8 +85,8 @@ Tract.getTractbyName = (name, result) => {
     });
 }
 
-Tract.getRelationCluster = (name, result) => {
-    Connection.query(`select * from ${process.env.TABLE}`, (err, res) => {
+Tract.getRelationCluster = (data, result) => {
+    Connection.query(`select * from ${data.project}`, (err, res) => {
         if (err) {
             console.log('error');
             result(null, err);

@@ -20,7 +20,7 @@ exports.getTractList = (req, res) => {
 
 //Tract list seperated by tract number
 exports.getTractCluster = (req, res) => {
-    TractModel.getAllTracts((err, tracts) => {
+    TractModel.getAllTracts(req.params.project, (err, tracts) => {
         console.log("All Tracts are here");
         if (err)
             res.send(err);
@@ -113,7 +113,7 @@ exports.getTractbyNo = (req, res) => {
 
 //get records accossiated with stakeholder and their tracts
 exports.getRelationCluster = (req, res) => {
-    TractModel.getRelationCluster(req.params.name, (err, tract) => {
+    TractModel.getRelationCluster({name: req.params.name, project: req.params.project}, (err, tract) => {
         if (err)
             res.send(err);
 
@@ -178,7 +178,7 @@ exports.getTractbyName = (req, res) => {
 
 // compiles a list of provinces/states and the citites within them
 exports.getReport = (req, res) => {
-    TractModel.getAllTracts((err, tracts) => {
+    TractModel.getAllTracts(req.params.project, (err, tracts) => {
         if (err)
             res.send(err);
 

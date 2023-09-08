@@ -10,6 +10,7 @@ router.post("/login", AuthController.Login);
 router.get("/login", AuthController.getLogin);
 router.get("/logout", AuthController.Logout);
 router.get("/users", AuthController.getUsers);
+router.get('/getAll', validateToken, AuthController.getProjects);
 
 router.get('/isUserAuth', validateToken, (req, res) => {
     res.send({ auth: true, message: "you are authenticatied!" });

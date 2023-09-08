@@ -30,4 +30,16 @@ User.getUsers = (result) => {
     });
 }
 
+User.getProjects = (result) => {
+    Connection.query(`show tables where ${process.env.DATABASENAME} REGEXP '^[A-Za-z]+_[0-9]{4}$'`, (err, res) => {
+        if (err) {
+            console.log(err);
+            result(null, err);
+        } else {
+            console.log("All Projects");
+            result(null, res);
+        }
+    });
+}
+
 module.exports = User;

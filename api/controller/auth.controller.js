@@ -78,3 +78,18 @@ exports.getUsers = (req, res) => {
     });
 }
 
+exports.getProjects = (req, res) => {
+    AuthModel.getProjects((err, projects) => {
+        if (err) {
+            res.send(err);
+        } else {
+            const projectNames = projects.map((project) => project.Tables_in_srm);
+            console.log(projectNames);
+            res.send(projectNames);
+        }
+    });
+};
+
+
+
+

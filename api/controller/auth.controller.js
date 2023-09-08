@@ -83,7 +83,7 @@ exports.getProjects = (req, res) => {
         if (err) {
             res.send(err);
         } else {
-            const projectNames = projects.map((project) => project.Tables_in_srm);
+            const projectNames = projects.map((project) => project.Tables_in_SRM);
             console.log(projectNames);
             res.send(projectNames);
         }

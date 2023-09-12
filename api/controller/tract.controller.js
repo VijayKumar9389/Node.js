@@ -176,7 +176,7 @@ exports.getTractbyName = (req, res) => {
     });
 }
 
-// compiles a list of provinces/states and the citites within them
+// compiles a list of analytics
 exports.getReport = (req, res) => {
     TractModel.getAllTracts(req.params.project, (err, tracts) => {
         if (err)
@@ -193,6 +193,10 @@ exports.getReport = (req, res) => {
         var missingPhone = 0;
         var total = [];
         var stakeholderList = [];
+        var consulted = 0;
+        var notConsulted = 0;
+        var deliverySceduled = 0;
+        var deliveryNotScheduled = 0;
 
         //removes duplicate records
         for (let i = 0; i < json.length; i++) {
@@ -210,6 +214,23 @@ exports.getReport = (req, res) => {
                 contacted++;
             }
         }
+
+        for (let i = 0; i < total.length; i++) {
+            if (total[i].CONSULTATION !== '') {
+                consulted++;
+            } else {
+                notConsulted++;
+            }
+        }
+
+        for (let i = 0; i < total.length; i++) {
+            if (total[i].LOCATION !== '') {
+                deliverySceduled++;
+            } else {
+                deliveryNotScheduled++;
+            }
+        }
+
 
         //grabs to number of stakeholders attempted and not
         for (let i = 0; i < total.length; i++) {
@@ -247,7 +268,7 @@ exports.getReport = (req, res) => {
                 singleTract++;
             }
         }
-        res.send({ contacted: contacted, remaining: remaining, missingPhone: missingPhone, total: total.length, single: singleTract, multi: multiTract });
+        res.send({ contacted: contacted, remaining: remaining, missingPhone: missingPhone, total: total.length, single: singleTract, multi: multiTract, attempted: attempted, noAttempts: noAttempts, consulted: consulted, notConsulted: notConsulted, deliverySceduled: deliverySceduled, deliveryNotScheduled: deliveryNotScheduled });
     });
 }
 

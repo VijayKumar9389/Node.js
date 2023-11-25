@@ -113,7 +113,8 @@ exports.getTractbyNo = (req, res) => {
 
 //get records accossiated with stakeholder and their tracts
 exports.getRelationCluster = (req, res) => {
-    TractModel.getRelationCluster({name: req.params.name, project: req.params.project}, (err, tract) => {
+    console.log("test")
+    TractModel.getRelationCluster({ name: req.params.name, project: req.params.project }, (err, tract) => {
         if (err)
             res.send(err);
 
@@ -124,12 +125,13 @@ exports.getRelationCluster = (req, res) => {
         var idList = [];
         var cluster = [];
 
-        //Grabs all tracts under the requested name
+        // Grabs all tracts under the requested name
         for (let index = 0; index < json.length; index++) {
-            if (json[index].NAME === req.params.name) {
-                stakeholder.push(json[index])
+            if (json[index].NAME.includes(req.params.name)) {
+                stakeholder.push(json[index]);
             }
         }
+
 
         //Adds records with matching tracts
         for (let i = 0; i < stakeholder.length; i++) {
@@ -274,7 +276,7 @@ exports.getReport = (req, res) => {
 
 exports.updateTract = (req, res) => {
     const tractData = req.body
-    TractModel.updateTract({data: tractData, project: req.params.project}, (err, stakeholder) => {
+    TractModel.updateTract({ data: tractData, project: req.params.project }, (err, stakeholder) => {
         console.log("Tract updated");
         if (err)
             res.send(err);

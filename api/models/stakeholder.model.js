@@ -15,15 +15,17 @@ var Stakeholder = (stakeholder) => {
     this.corperation = stakeholder.corperation;
     this.route = stakeholder.route;
     this.location = stakeholder.location;
+    this.tracts = stakeholder.tracts;
 }
 
 Stakeholder.getAllStakeholders = (project, result) => {
-    Connection.query(`SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, EMAIL, STAKEHOLDERCOMMENT, CORPERATION, ROUTE, LOCATION, COUNT(*) as count FROM ${project} group by NAME`, (err, res) => {
+    Connection.query(`SELECT NAME, CONTACT, STREET, MAILING, PHONE, CONTACTED, ATTEMPTS, CONSULTATION, FOLLOWUP, EMAIL, STAKEHOLDERCOMMENT, CORPERATION, ROUTE, LOCATION, GROUP_CONCAT(DISTINCT TRACT) as tracts, COUNT(*) as count FROM ${project} group by NAME`, (err, res) => {
         if (err) {
             console.log('error', err);
             result(null, err);
         } else {
             console.log("Stakeholders fetched successfully");
+            console.log(res);
             result(null, res);
         }
     });

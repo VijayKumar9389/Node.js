@@ -47,7 +47,6 @@ exports.getConnections = (req, res) => {
             if (stakeholder.NAME !== clientName) {
                 const targetLastNames = getLastNames(stakeholder.NAME);
                 const matchName = hasCommonElement(clientLastNames, targetLastNames);
-                console.log("isNameMatch", matchName)
 
                 const matchStreet = (STREET && stakeholder.STREET === STREET);
                 const matchMailing = (MAILING && stakeholder.MAILING === MAILING);

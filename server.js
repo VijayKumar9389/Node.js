@@ -25,7 +25,7 @@ app.use(cors({
 
 // Routes
 app.get('/', (req, res) => {
-    res.send("Triton Sesrver Endpoint 2ee spring")
+    res.send("Triton Server is running...")
 });
 
 const tractRoutes = require("./api/routes/tract.route");
